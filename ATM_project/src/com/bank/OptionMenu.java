@@ -2,24 +2,24 @@ package com.bank;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Scanner;
 import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Scanner;
 
-public class OptionMenu 
+public class OptionMenu
 {
-	Scanner menuInput=new Scanner(System.in);
+	Scanner menuInput = new Scanner(System.in);
 	//each # rep 0-9
-	DecimalFormat moneyFormat=new DecimalFormat("'₹'###,##0.00");
-	HashMap<Integer,Account> data =new HashMap<Integer,Account>();
+	DecimalFormat moneyFormat = new DecimalFormat("'₹'######0.00");
+	HashMap<Integer, Account> data = new HashMap<Integer, Account>();
+	
 	public void getLogin() throws IOException
 	{
-		boolean end=false;
-		int customerNumber =0;
-		int pinNumber;
+		boolean end = false;
+		int customerNumber = 0;
+		int pinNumber = 0;
 		while(!end)
 		{
 			try
@@ -28,11 +28,15 @@ public class OptionMenu
 				customerNumber = menuInput.nextInt();
 				System.out.println("\nEnter your PIN number: ");
 				pinNumber = menuInput.nextInt();
+				//System.out.println("The set is: " + data.entrySet());
 				Iterator it = data.entrySet().iterator();
 				while(it.hasNext())
 				{
-					Entry pair = (Map.Entry)it.next();
+					Map.Entry pair = (Map.Entry) it.next();
+					//System.out.println(pair);
 					Account acc = (Account) pair.getValue();
+					//System.out.println(acc);
+					//System.out.println(data.containsKey(customerNumber));
 					if(data.containsKey(customerNumber) && pinNumber == acc.getPinNumber())
 					{
 						getAccountType(acc);
@@ -42,16 +46,17 @@ public class OptionMenu
 				}
 				if(!end)
 				{
-					System.out.println("\nWrong Customer Number or PIN number");
+					System.out.println("\nWrong Customer Number or PIN Number");
 				}
 			}
-			catch(InputMismatchException ex)
+			catch (InputMismatchException ex)
 			{
 				System.out.println("\nInvalid Character(s). Only Numbers are allowed.");
 				menuInput.next();
 			}
 		}
 	}
+	
 	public void getAccountType(Account acc)
 	{
 		boolean end = false;
@@ -60,37 +65,36 @@ public class OptionMenu
 			try
 			{
 				System.out.println("\nSelect the account you want to access: ");
-				
-				System.out.println("\n Type 1 - Checkings Account");
-				System.out.println("\n Type 2 - SAvings Account");
-				System.out.println("\n Type 3 - Exit");
+				System.out.println(" Type 1 - Checkings Account");
+				System.out.println(" Type 2 - Savings Account");
+				System.out.println(" Type 3 - Exit");
 				System.out.println("\nChoice: ");
 				
 				int selection = menuInput.nextInt();
 				
 				switch (selection)
 				{
-				case 1:
-					getChecking(acc);
-					break;
-				case 2:
-					getSaving(acc);
-					break;
-				case 3:
-					end = true;
-					break;
-					default:
-						System.out.println("\nInvalid Choice.");
-					
+					case 1: 
+						   getChecking(acc);
+						   break;
+					case 2:
+						   getSaving(acc);
+						   break;
+					case 3:
+						   end = true;
+						   break;
+				    default:
+				    	    System.out.println("\nInvalid Choice.");
 				}
 			}
-				catch(InputMismatchException ex)
-				{
-					System.out.println("\nInvalid Choice.");
-					menuInput.next();
-				}
+			catch (InputMismatchException ex)
+			{
+				System.out.println("\nInvalid Choice.");
+				menuInput.next();	
 			}
 		}
+	}
+	
 	public void getChecking(Account acc)
 	{
 		boolean end = false;
@@ -108,35 +112,35 @@ public class OptionMenu
 				
 				int selection = menuInput.nextInt();
 				
-				switch(selection)
+				switch (selection)
 				{
-				case 1:
-					System.out.println("\nChecking Account Balance: " + moneyFormat.format(acc.getCheckingBalance()));
-					break;
-				case 2:
-					acc.getCheckingWithdrawInput();
-					break;
-				case 3:
-					acc.getCheckingDepositInput();
-					break;
-				case 4:
-					acc.getTransferInput("Checkings");
-					break;
-				case 5:
-					end = true;
-					break;
-					default:
-						System.out.println("\nInvalid Choice.");
+					case 1: 
+						    System.out.println("\nChecking Account Balance: " + moneyFormat.format(acc.getCheckingBalance()));
+						    break;
+					case 2:
+							acc.getCheckingWithdrawInput();
+							break;
+					case 3:
+							acc.getCheckingDepositInput();
+							break;
+					case 4:
+							acc.getTransferInput("Checkings");
+							break;
+					case 5:
+						   end = true;
+						   break;
+				    default:
+				    	    System.out.println("\nInvalid Choice.");
 				}
-			}
-			catch(InputMismatchException ex)
+			} 
+			catch (InputMismatchException ex)
 			{
 				System.out.println("\nInvalid Choice. ");
 				menuInput.next();
 			}
-	
 		}
 	}
+	
 	public void getSaving(Account acc)
 	{
 		boolean end = false;
@@ -144,7 +148,7 @@ public class OptionMenu
 		{
 			try
 			{
-				System.out.println("\nCheckings Account: ");
+				System.out.println("\nSavings Account: ");
 				System.out.println(" Type 1 - View Balance");
 				System.out.println(" Type 2 - Withdraw Funds");
 				System.out.println(" Type 3 - Deposit Funds");
@@ -154,34 +158,35 @@ public class OptionMenu
 				
 				int selection = menuInput.nextInt();
 				
-				switch(selection)
+				switch (selection)
 				{
-				case 1:
-					System.out.println("\nSaving Account Balance: " + moneyFormat.format(acc.getSavingBalance()));
-					break;
-				case 2:
-					acc.getSavingWithdrawInput();
-					break;
-				case 3:
-					acc.getSavingDepositInput();
-					break;
-				case 4:
-					acc.getTransferInput("Savings");
-					break;
-				case 5:
-					end = true;
-					break;
-					default:
-						System.out.println("\nInvalid Choice.");
+					case 1: 
+						    System.out.println("\nSavings Account Balance: " + moneyFormat.format(acc.getSavingBalance()));
+						    break;
+					case 2:
+							acc.getSavingWithdrawInput();
+							break;
+					case 3:
+							acc.getSavingDepositInput();
+							break;
+					case 4:
+							acc.getTransferInput("Savings");
+							break;
+					case 5:
+						   end = true;
+						   break;
+				    default:
+				    	    System.out.println("\nInvalid Choice.");
 				}
-			}
-			catch(InputMismatchException ex)
+			} 
+			catch (InputMismatchException ex)
 			{
 				System.out.println("\nInvalid Choice. ");
 				menuInput.next();
 			}
 		}
 	}
+		
 	public void createAccount() throws IOException
 	{
 		int cst_no = 0;
@@ -199,14 +204,14 @@ public class OptionMenu
 					if(!data.containsKey(cst_no))
 					{
 						end = true;
-					}	
+					}
 				}
 				if(!end)
 				{
-					System.out.println("\nThis Customer number is already registered");
+					System.out.println("\nThis customer number is already registered");
 				}
 			}
-			catch(InputMismatchException ex)
+			catch (InputMismatchException ex)
 			{
 				System.out.println("\nInvalid Choice.");
 				menuInput.next();
@@ -216,38 +221,39 @@ public class OptionMenu
 		int pin = menuInput.nextInt();
 		data.put(cst_no, new Account(cst_no, pin));
 		System.out.println("\nYour new account has been successfuly registered!");
-		System.out.println("\nRedirecting to login................");
+		System.out.println("\nRedirecting to login.................");
 		getLogin();
 	}
 	
 	public void mainMenu() throws IOException
 	{
+		//key and value pair, one entry object
 		data.put(952141, new Account(952141, 191904, 1000, 5000));
-		data.put(952141, new Account(123, 123, 20000, 50000));
+		data.put(123,  new Account(123, 123, 20000, 50000));
 		boolean end = false;
 		while(!end)
 		{
 			try
 			{
 				System.out.println("\n Type 1 - Login");
-				System.out.println("\n Type 2 - Create Account");
+				System.out.println(" Type 2 - Create Account");
 				System.out.println("\nChoice: ");
 				int choice = menuInput.nextInt();
 				switch(choice)
 				{
-				case 1:
-					getLogin();
-					end = true;
-					break;
-				case 2:
-					createAccount();
-					end = true;
-					break;
+					case 1: 
+						   getLogin();
+						   end = true;
+						   break;
+					case 2:
+							createAccount();
+							end = true;
+							break;
 					default:
-						System.out.println("\nInvalid Choice.");
+						  	System.out.println("\nInvalid Choice.");
 				}
-			}
-			catch(InputMismatchException ex)
+			} 
+			catch (InputMismatchException ex)
 			{
 				System.out.println("\nInvalid Choice.");
 				menuInput.next();
